@@ -1,9 +1,11 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RandomSpawner : MonoBehaviour
 {
     [SerializeField] private Cube _prefabCube;
+    [SerializeField] private PoolHandler _poolHandler;
 
     private int _heightSpawn = 6;
     private int _minRangeX = -4;
@@ -25,7 +27,7 @@ public class RandomSpawner : MonoBehaviour
         {
             Vector3 randomPosition = new Vector3(Random.Range(_minRangeX, _maxRangeX), _heightSpawn, Random.Range(_minRangeZ, _maxRangeZ));
 
-            Instantiate(_prefabCube, randomPosition, Quaternion.identity);
+            _poolHandler.Pool.GiveCube(randomPosition);
 
             yield return delay;
         }

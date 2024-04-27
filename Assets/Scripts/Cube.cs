@@ -5,7 +5,7 @@ using UnityEngine;
 public class Cube : MonoBehaviour
 {
     private Renderer _renderer;
-    private bool IsChangedColor = false;
+    private bool IsCollidedWithGround = false;
     private int _minTimeDeletion = 2;
     private int _maxTimeDeletion = 6;
 
@@ -16,19 +16,15 @@ public class Cube : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (IsChangedColor == false)
+        if(collision.collider.TryGetComponent(out Ground ground))
         {
-            _renderer.material.color = Random.ColorHSV();
-            IsChangedColor = true;
+            if (IsCollidedWithGround == false)
+            {
+                _renderer.material.color = Random.ColorHSV();
+                IsCollidedWithGround = true;
 
-            StartCoroutine(Die());
-        }
-    }
-
-    private IEnumerator Die()
-    {
-        yield return new WaitForSeconds(Random.Range(_minTimeDeletion, _maxTimeDeletion));
-
-        Destroy(gameObject);
+               StartCoroutine(ground.DeliteCube(this, _minTimeDeletion, _maxTimeDeletion));
+            }
+        }    
     }
 }
